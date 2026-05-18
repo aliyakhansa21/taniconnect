@@ -1,0 +1,8 @@
+{
+  "name": "taniconnect-monorepo",
+  "private": true,
+  "workspaces": [
+    "fe",
+    "be"
+  ]
+}

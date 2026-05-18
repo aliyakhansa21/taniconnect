@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+be/node_modules/
+fe/node_modules/
+
+# Environment variables (Sangat penting agar API Key & password database tidak bocor ke GitHub!)
+.env
+.env.local
+
+# Build outputs
+dist/
+.next/
+
+# Misc
+.DS_Store

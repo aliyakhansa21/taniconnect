@@ -3,7 +3,7 @@ node_modules/
 be/node_modules/
 fe/node_modules/
 
-# Environment variables (Sangat penting agar API Key & password database tidak bocor ke GitHub!)
+# Environment variables
 .env
 .env.local
 

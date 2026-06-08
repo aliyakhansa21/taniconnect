@@ -1,26 +1,148 @@
 @import "tailwindcss";
+@source "./";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ── Green Palette ── */
+  --color-green-50:  #f0faf4;
+  --color-green-100: #d8f3dc;
+  --color-green-300: #52b788;
+  --color-green-500: #3a8a5e;
+  --color-green-700: #2d6a4f;
+  --color-green-900: #1a4a2e;
+
+  /* ── Brand Semantic ── */
+  --color-primary:   #3a8a5e;
+  --color-secondary: #f6c90e;
+
+  /* ── Yellow Palette ── */
+  --color-yellow-100: #fffbe6;
+  --color-yellow-200: #fef3c7;
+  --color-yellow-400: #f6d860;
+  --color-yellow-500: #f6c90e;
+  --color-yellow-600: #e6b800;
+  --color-yellow-900: #92400e;
+
+  /* ── Text ── */
+  --color-text-heading: #1a1a2e;
+  --color-text-body:    #374151;
+  --color-text-muted:   #6b7280;
+
+  /* ── Font ── */
+  --font-sans: var(--font-jakarta, "Plus Jakarta Sans", system-ui, sans-serif);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ────────────────────────────────────────────
+   BASE RESET
+──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body  { font-family: var(--font-sans); overflow-x: hidden; }
+
+/* ────────────────────────────────────────────
+   COMPLEX GRADIENT UTILITIES
+   (Multi-stop directional/radial gradients that
+   cannot be expressed cleanly with Tailwind alone)
+──────────────────────────────────────────── */
+
+/* Hero dark directional overlay */
+.bg-hero-overlay {
+  background: linear-gradient(
+    115deg,
+    rgba(10, 35, 18, 0.88) 0%,
+    rgba(20, 60, 35, 0.76) 45%,
+    rgba(26, 74, 46, 0.48) 72%,
+    rgba(0, 0, 0, 0.12)   100%
+  );
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Problem card top accent bar */
+.bg-problem-accent {
+  background: linear-gradient(90deg, #f6c90e 0%, #f97316 100%);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* CTA section radial glow decoratives */
+.cta-glow-1 {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+}
+.cta-glow-2 {
+  background: radial-gradient(circle, rgba(82, 183, 136, 0.20) 0%, transparent 70%);
+}
+
+/* ────────────────────────────────────────────
+   ANIMATIONS
+──────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.4; transform: scale(1.4); }
+}
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0);     }
+  50%       { transform: translateY(-10px); }
+}
+
+.anim-1     { animation: fadeInUp    0.6s 0.00s ease both; }
+.anim-2     { animation: fadeInUp    0.6s 0.10s ease both; }
+.anim-3     { animation: fadeInUp    0.6s 0.20s ease both; }
+.anim-4     { animation: fadeInUp    0.6s 0.30s ease both; }
+.anim-5     { animation: fadeInUp    0.6s 0.40s ease both; }
+.anim-pulse { animation: pulseDot    1.5s ease infinite;    }
+.anim-float { animation: floatUpDown 3s   ease-in-out infinite; }
+
+/* ────────────────────────────────────────────
+   NAVBAR SCROLL STATE
+──────────────────────────────────────────── */
+.navbar-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ────────────────────────────────────────────
+   CARD HOVER LIFT
+   (Combined transform + shadow transition that
+   Tailwind hover utilities can't express cleanly)
+──────────────────────────────────────────── */
+.card-lift {
+  transition:
+    transform     0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow    0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color  0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-lift:hover {
+  transform:  translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* ────────────────────────────────────────────
+   FOOTER LINK HOVER
+   (translateX on hover requires raw CSS)
+──────────────────────────────────────────── */
+.footer-link {
+  display: inline-block;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.footer-link:hover {
+  color: #52b788; /* green-300 */
+  transform: translateX(4px);
+}
+
+/* ────────────────────────────────────────────
+   FOOTER RESPONSIVE GRID
+──────────────────────────────────────────── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: 3rem;
+}
+@media (max-width: 768px) {
+  .footer-grid               { grid-template-columns: 1fr 1fr; }
+  .footer-grid .footer-brand { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .footer-grid               { grid-template-columns: 1fr; }
+  .footer-grid .footer-brand { grid-column: span 1; }
 }

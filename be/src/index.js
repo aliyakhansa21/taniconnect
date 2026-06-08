@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000; 
 
 // Middleware
 app.use(cors()); 
@@ -17,7 +17,10 @@ app.get('/', (req, res) => {
   res.send('TaniConnect Backend is running pakai JavaScript! 🚀');
 });
 
-// Jalankan server
-app.listen(port, () => {
-  console.log(`Server berjalan di http://localhost:${port}`);
+// Route semantic search
+const searchRoutes = require('./routes/search.js');
+app.use('/api', searchRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Server Backend TaniConnect berjalan mulus di http://localhost:${PORT}`);
 });

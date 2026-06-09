@@ -16,7 +16,7 @@ export default function TestMapPage() {
     <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-50 p-6">
       <div className="mb-6 text-center">
         <h1 className="text-2xl font-bold text-gray-800">Test Mapbox API</h1>
-        <p className="text-sm text-gray-500 mt-1">Geospatial Heatmap Foundation - Sleman</p>
+        <p className="text-sm text-red-500 mt-1">Geospatial Heatmap Foundation - Sleman</p>
       </div>
       
       {/* Container peta */}

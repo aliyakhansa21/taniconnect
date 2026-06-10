@@ -21,6 +21,12 @@ app.get('/', (req, res) => {
 const searchRoutes = require('./routes/search.js');
 app.use('/api', searchRoutes);
 
+const testGeminiRoutes = require('./routes/test-gemini.js');
+app.use('/api', testGeminiRoutes);
+
+const testEmbeddingRoutes = require('./routes/test-embedding.js');
+app.use('/api', testEmbeddingRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server Backend TaniConnect berjalan mulus di http://localhost:${PORT}`);
 });

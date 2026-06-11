@@ -1,178 +1,105 @@
-'use client'
-import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
+"use client";
 
-type Role = 'petani' | 'restoran'
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { FaSeedling, FaUtensils } from "react-icons/fa";
 
-export default function RegisterPage() {
-  const supabase = createClient()
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [form, setForm] = useState({
-    full_name: '',
-    email: '',
-    password: '',
-    role: 'restoran' as Role,
-  })
-
-  function update(field: string, value: string) {
-    setForm(f => ({ ...f, [field]: value }))
-    setError('')
-  }
-
-  async function handleRegister() {
-    if (!form.full_name || !form.email || !form.password) {
-      setError('Semua field wajib diisi.')
-      return
-    }
-    if (form.password.length < 6) {
-      setError('Password minimal 6 karakter.')
-      return
-    }
-
-    setLoading(true)
-    const { error } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
-      options: {
-        data: {
-          full_name: form.full_name,
-          role: form.role,
-        },
-      },
-    })
-
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-      return
-    }
-
-    router.push(`/dashboard/${form.role}`)
-  }
-
+export default function RegisterRolePage() {
   return (
-    <main style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#F7FDF9',
-      padding: 16,
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: 400,
-        background: 'white',
-        borderRadius: 16,
-        padding: 32,
-        boxShadow: '0 2px 16px rgba(0,0,0,0.07)',
-      }}>
-        {/* Logo */}
-        <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>
-          <span style={{ color: '#1A7A4A' }}>Tani</span>
-          <span style={{ color: '#0F4F2F' }}>Connect</span>
-        </h1>
-        <p style={{ color: '#718096', fontSize: 14, marginBottom: 24 }}>
-          Buat akun untuk mulai bertransaksi
-        </p>
-
-        {/* Pilih Role */}
-        <p style={{ fontSize: 13, fontWeight: 500, marginBottom: 8, color: '#1C2B2B' }}>
-          Saya adalah...
-        </p>
-        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-          {(['petani', 'restoran'] as Role[]).map(r => (
-            <button
-              key={r}
-              onClick={() => update('role', r)}
-              style={{
-                flex: 1,
-                padding: '10px 8px',
-                borderRadius: 10,
-                border: `2px solid ${form.role === r ? '#1A7A4A' : '#E2E8F0'}`,
-                background: form.role === r ? '#E8F5E9' : 'white',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: 14,
-                color: form.role === r ? '#1A7A4A' : '#718096',
-                transition: 'all 0.15s',
-              }}
-            >
-              {r === 'petani' ? '🌾 Petani' : '🍽️ Restoran'}
-            </button>
-          ))}
-        </div>
-
-        {/* Form */}
-        {[
-          { key: 'full_name', label: 'Nama Lengkap', type: 'text', placeholder: 'Contoh: Pak Slamet' },
-          { key: 'email', label: 'Email', type: 'email', placeholder: 'email@contoh.com' },
-          { key: 'password', label: 'Password', type: 'password', placeholder: 'Minimal 6 karakter' },
-        ].map(field => (
-          <div key={field.key} style={{ marginBottom: 14 }}>
-            <label style={{ fontSize: 13, fontWeight: 500, color: '#1C2B2B', display: 'block', marginBottom: 4 }}>
-              {field.label}
-            </label>
-            <input
-              type={field.type}
-              placeholder={field.placeholder}
-              value={form[field.key as keyof typeof form]}
-              onChange={e => update(field.key, e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px 12px',
-                borderRadius: 8,
-                border: '1.5px solid #E2E8F0',
-                fontSize: 14,
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
-            />
-          </div>
-        ))}
-
-        {/* Error */}
-        {error && (
-          <p style={{
-            background: '#FFF5F5',
-            color: '#E53E3E',
-            padding: '8px 12px',
-            borderRadius: 8,
-            fontSize: 13,
-            marginBottom: 14,
-          }}>
-            {error}
-          </p>
-        )}
-
-        {/* Submit */}
-        <button
-          onClick={handleRegister}
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: 13,
-            background: loading ? '#718096' : '#1A7A4A',
-            color: 'white',
-            border: 'none',
-            borderRadius: 10,
-            fontSize: 15,
-            fontWeight: 600,
-            cursor: loading ? 'not-allowed' : 'pointer',
-            transition: 'background 0.15s',
-          }}
+    <div className="min-h-screen bg-[#FBF6E6] flex flex-col">
+      {/* Top Bar */}
+      <header className="w-full px-6 py-4 flex items-center justify-between">
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+          id="back-to-home-btn"
         >
-          {loading ? 'Mendaftar...' : 'Daftar Sekarang'}
-        </button>
+          <ChevronLeft size={16} />
+          <span>Kembali ke halaman utama</span>
+        </Link>
 
-        <p style={{ textAlign: 'center', fontSize: 13, color: '#718096', marginTop: 16 }}>
-          Sudah punya akun?{' '}
-          <a href="/auth/login" style={{ color: '#1A7A4A', fontWeight: 500 }}>Masuk di sini</a>
-        </p>
-      </div>
-    </main>
-  )
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb pendaftaran"
+          className="hidden sm:flex items-center gap-1.5 text-sm"
+        >
+          <span className="text-gray-400">Daftar</span>
+          <ChevronRight size={14} className="text-gray-300" />
+          <span className="text-[#2D3A1E] font-semibold">Pilih Role</span>
+        </nav>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-10">
+        <div className="w-full max-w-lg">
+          <h1 className="text-3xl font-bold text-[#1C2B0E] text-center mb-2">
+            Saya bergabung sebagai...
+          </h1>
+          <p className="text-gray-500 text-center mb-10">
+            Pilih peran Anda untuk memulai.
+          </p>
+
+          <div className="flex flex-col gap-4">
+            {/* Petani / Supplier */}
+            <Link
+              href="/auth/register/petani"
+              id="role-petani-btn"
+              className="flex items-center gap-4 p-5 bg-white border border-gray-200 rounded-2xl hover:border-[#4A7C28] hover:shadow-md transition-all duration-200 group"
+            >
+              <div className="w-16 h-16 rounded-xl bg-[#E8F5D6] flex items-center justify-center shrink-0">
+                <FaSeedling size={28} className="text-[#4A7C28]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-lg font-bold text-[#1C2B0E] mb-0.5">
+                  Petani / Supplier
+                </p>
+                <p className="text-sm text-gray-500">
+                  Jual hasil panen langsung ke restoran
+                </p>
+              </div>
+              <ChevronRight
+                size={20}
+                className="text-gray-300 group-hover:text-[#4A7C28] transition-colors shrink-0"
+              />
+            </Link>
+
+            {/* Pembeli */}
+            <Link
+              href="/auth/register/pembeli"
+              id="role-pembeli-btn"
+              className="flex items-center gap-4 p-5 bg-white border border-gray-200 rounded-2xl hover:border-[#4A7C28] hover:shadow-md transition-all duration-200 group"
+            >
+              <div className="w-16 h-16 rounded-xl bg-[#F5F0E8] flex items-center justify-center shrink-0">
+                <FaUtensils size={24} className="text-[#8B6914]" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-lg font-bold text-[#1C2B0E] mb-0.5">
+                  Pembeli
+                </p>
+                <p className="text-sm text-gray-500">
+                  Beli bahan segar dari petani lokal
+                </p>
+              </div>
+              <ChevronRight
+                size={20}
+                className="text-gray-300 group-hover:text-[#4A7C28] transition-colors shrink-0"
+              />
+            </Link>
+          </div>
+
+          <p className="text-center text-sm text-gray-500 mt-8">
+            Sudah punya akun?{" "}
+            <Link
+              href="/auth/login"
+              className="text-[#1C2B0E] font-bold hover:underline"
+              id="goto-login-link"
+            >
+              Masuk di sini
+            </Link>
+          </p>
+        </div>
+      </main>
+    </div>
+  );
 }

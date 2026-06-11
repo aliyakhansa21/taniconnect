@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @source "./components";
 @source "./auth";
+@source "./dashboard";
+
 
 @theme {
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;

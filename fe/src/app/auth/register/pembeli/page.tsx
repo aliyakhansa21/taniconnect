@@ -30,11 +30,11 @@ export default function RegisterPembeliPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBF6E6] flex flex-col p-4 lg:p-6">
+    <div className="min-h-screen bg-[#FBF6E6] flex flex-col">
       {/* Main Content — navbar lives inside the image panel */}
-      <main className="flex-1 flex flex-col lg:flex-row items-stretch">
-        {/* Left: Hero Image Panel */}
-        <div className="relative w-full lg:w-[45%] min-h-[320px] lg:min-h-screen rounded-none lg:rounded-tr-3xl lg:rounded-br-3xl overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row items-stretch lg:p-4 lg:gap-4">
+        {/* Left: Hero Image Panel — rounded di semua sisi pada desktop */}
+        <div className="relative w-full lg:w-[45%] min-h-[320px] lg:min-h-0 rounded-none lg:rounded-3xl overflow-hidden flex-shrink-0">
           <Image
             src="/hero-farm.png"
             alt="Petani sedang panen di ladang"

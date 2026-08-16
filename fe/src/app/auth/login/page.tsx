@@ -24,7 +24,6 @@ function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    full_name: "",
     email: "",
     password: "",
   });
@@ -49,9 +48,9 @@ function LoginForm() {
   return (
     <div className="min-h-screen bg-[#FBF6E6] flex flex-col">
       {/* Main Content — navbar lives inside the image panel */}
-      <main className="flex-1 flex flex-col lg:flex-row items-stretch">
-        {/* Left: Hero Image Panel */}
-        <div className="relative w-full lg:w-[45%] min-h-[320px] lg:min-h-screen rounded-none lg:rounded-tr-3xl lg:rounded-br-3xl overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row items-stretch p-0 lg:p-4 gap-0 lg:gap-4">
+        {/* Left: Hero Image Panel — rounded di semua sisi */}
+        <div className="relative w-full lg:w-[45%] min-h-[320px] lg:min-h-0 rounded-none lg:rounded-3xl overflow-hidden flex-shrink-0">
           <Image
             src="/hero-farm.png"
             alt="Petani sedang panen di ladang"
@@ -97,24 +96,6 @@ function LoginForm() {
             </h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Nama Lengkap */}
-              <div>
-                <label
-                  htmlFor="login-full-name"
-                  className="block text-sm font-semibold text-[#1C2B0E] mb-1.5"
-                >
-                  Nama Lengkap
-                </label>
-                <input
-                  id="login-full-name"
-                  type="text"
-                  placeholder="Contoh: Budi Washington"
-                  value={form.full_name}
-                  onChange={(e) => update("full_name", e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4A7C28]/30 focus:border-[#4A7C28] transition-all"
-                  required
-                />
-              </div>
 
               {/* Email */}
               <div>

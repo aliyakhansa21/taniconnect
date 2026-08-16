@@ -45,8 +45,8 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="TaniConnect"
-              width={140}
-              height={36}
+              width={200}
+              height={100}
               className={`h-8 w-auto transition-all duration-300 ${
                 scrolled ? "" : "brightness-0 invert"
               }`}
@@ -76,7 +76,7 @@ export default function Navbar() {
           {/* ── CTA + Hamburger ── */}
           <div className="flex items-center gap-2.5">
             <a
-              href="#mulai"
+              href="/auth/register"
               id="navbar-cta-btn"
               className={`hidden sm:inline-flex items-center px-5 py-2 rounded-full font-bold text-sm no-underline transition-all duration-200 hover:-translate-y-0.5 ${
                 scrolled

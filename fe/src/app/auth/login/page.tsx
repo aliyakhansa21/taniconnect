@@ -3,17 +3,27 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { Suspense } from "react";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const role = searchParams.get("role") === "petani" ? "petani" : "pembeli";
+  const router = useRouter();
+
+  // Tentukan role: dari URL param, localStorage (jika datang dari register), default ke 'pembeli'
+  const urlRole = searchParams.get("role");
+  const storedRole =
+    typeof window !== "undefined" ? localStorage.getItem("mockup_role") : null;
+  const role: "petani" | "pembeli" =
+    urlRole === "petani" || urlRole === "pembeli"
+      ? urlRole
+      : storedRole === "petani"
+      ? "petani"
+      : "pembeli";
 
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
-    full_name: "",
     email: "",
     password: "",
   });
@@ -24,31 +34,25 @@ function LoginForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // buat integrasi backend nanti
+    // Mockup: simulasikan login berhasil, redirect ke dashboard sesuai role
+    localStorage.setItem("mockup_role", role);
+    if (role === "petani") {
+      router.push("/dashboard/petani");
+    } else {
+      router.push("/dashboard/restoran");
+    }
   }
 
   const isPetani = role === "petani";
 
   return (
     <div className="min-h-screen bg-[#FBF6E6] flex flex-col">
-      {/* Top Bar */}
-      <header className="w-full px-6 py-4 flex items-center">
-        <Link
-          href="/"
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
-          id="login-back-btn"
-        >
-          <ChevronLeft size={16} />
-          <span>Kembali ke halaman utama</span>
-        </Link>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col lg:flex-row items-stretch">
-        {/* Left: Hero Image Panel */}
-        <div className="relative w-full lg:w-[45%] min-h-[280px] lg:min-h-0 rounded-none lg:rounded-tr-3xl lg:rounded-br-3xl overflow-hidden">
+      {/* Main Content — navbar lives inside the image panel */}
+      <main className="flex-1 flex flex-col lg:flex-row items-stretch p-0 lg:p-4 gap-0 lg:gap-4">
+        {/* Left: Hero Image Panel — rounded di semua sisi */}
+        <div className="relative w-full lg:w-[45%] min-h-[320px] lg:min-h-0 rounded-none lg:rounded-3xl overflow-hidden flex-shrink-0">
           <Image
-            src="/auth-hero.png"
+            src="/hero-farm.png"
             alt="Petani sedang panen di ladang"
             fill
             sizes="(max-width: 1024px) 100vw, 45vw"
@@ -57,6 +61,18 @@ function LoginForm() {
           />
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+          {/* Pill Navbar — mengambang di dalam panel gambar */}
+          <div className="absolute top-5 left-4 right-4 z-10 flex items-center px-4 py-2.5 rounded-full bg-white/30 backdrop-blur-md border border-white/40 shadow-sm">
+            <Link
+              href="/"
+              className="flex items-center gap-1 text-sm text-[#5A490F] font-bold hover:text-[#322909] transition-colors font-medium"
+              id="login-back-btn"
+            >
+              <ChevronLeft size={15} />
+              <span>Kembali ke halaman utama</span>
+            </Link>
+          </div>
 
           {/* Text Overlay */}
           <div className="absolute bottom-8 left-7 right-7">
@@ -80,24 +96,6 @@ function LoginForm() {
             </h1>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              {/* Nama Lengkap */}
-              <div>
-                <label
-                  htmlFor="login-full-name"
-                  className="block text-sm font-semibold text-[#1C2B0E] mb-1.5"
-                >
-                  Nama Lengkap
-                </label>
-                <input
-                  id="login-full-name"
-                  type="text"
-                  placeholder="Contoh: Budi Washington"
-                  value={form.full_name}
-                  onChange={(e) => update("full_name", e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4A7C28]/30 focus:border-[#4A7C28] transition-all"
-                  required
-                />
-              </div>
 
               {/* Email */}
               <div>

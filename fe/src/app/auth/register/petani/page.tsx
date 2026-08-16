@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPetaniPage() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [form, setForm] = useState({
@@ -22,43 +24,19 @@ export default function RegisterPetaniPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // buat integrasi backend nanti
+    // Mockup: simpan role sementara ke localStorage, lalu arahkan ke halaman login
+    localStorage.setItem("mockup_role", "petani");
+    router.push("/auth/login?role=petani");
   }
 
   return (
     <div className="min-h-screen bg-[#FBF6E6] flex flex-col">
-      {/* Top Bar */}
-      <header className="w-full px-6 py-4 flex items-center justify-between">
-        <Link
-          href="/auth/register"
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
-          id="back-to-register-btn"
-        >
-          <ChevronLeft size={16} />
-          <span>Kembali ke halaman utama</span>
-        </Link>
-
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb pendaftaran petani"
-          className="hidden sm:flex items-center gap-1.5 text-sm"
-        >
-          <span className="text-gray-400">Daftar</span>
-          <ChevronRight size={14} className="text-gray-300" />
-          <span className="text-gray-400">Pilih Role</span>
-          <ChevronRight size={14} className="text-gray-300" />
-          <span className="text-[#2D3A1E] font-semibold">
-            Daftar sebagai Petani
-          </span>
-        </nav>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col lg:flex-row items-stretch">
-        {/* Left: Hero Image Panel */}
-        <div className="relative w-full lg:w-[45%] min-h-[280px] lg:min-h-0 rounded-none lg:rounded-tr-3xl lg:rounded-br-3xl overflow-hidden">
+      {/* Main Content — navbar lives inside the image panel */}
+      <main className="flex-1 flex flex-col lg:flex-row items-stretch lg:p-4 lg:gap-4">
+        {/* Left: Hero Image Panel — rounded di semua sisi pada desktop */}
+        <div className="relative w-full lg:w-[45%] min-h-[320px] lg:min-h-0 rounded-none lg:rounded-3xl overflow-hidden flex-shrink-0">
           <Image
-            src="/auth-hero.png"
+            src="/hero-farm.png"
             alt="Petani sedang panen di ladang"
             fill
             sizes="(max-width: 1024px) 100vw, 45vw"
@@ -67,6 +45,28 @@ export default function RegisterPetaniPage() {
           />
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+          {/* Pill Navbar — mengambang di dalam panel gambar */}
+          <div className="absolute top-5 left-4 right-4 z-10 flex items-center justify-between px-4 py-2.5 rounded-full bg-white/30 backdrop-blur-md border border-white/40 shadow-sm">
+            <Link
+              href="/auth/register"
+              className="flex items-center gap-1 text-sm text-[#5A490F] font-bold hover:text-[#322909] transition-colors font-medium"
+              id="back-to-register-btn"
+            >
+              <ChevronLeft size={15} />
+              <span>Kembali ke halaman utama</span>
+            </Link>
+            <nav
+              aria-label="Breadcrumb pendaftaran petani"
+              className="hidden sm:flex items-center gap-1 text-sm"
+            >
+              <span className="text-[#5A490F]">Daftar</span>
+              <ChevronRight size={13} className="text-[#5A490F]" />
+              <span className="text-[#5A490F]">Pilih Role</span>
+              <ChevronRight size={13} className="text-[#5A490F]" />
+              <span className="text-[#5A490F] font-semibold">Daftar sebagai Petani</span>
+            </nav>
+          </div>
 
           {/* Text Overlay */}
           <div className="absolute bottom-8 left-7 right-7">

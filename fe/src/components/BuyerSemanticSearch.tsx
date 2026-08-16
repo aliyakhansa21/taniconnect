@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Search, MapPin, Tag, Percent, SlidersHorizontal, PackageX, AlertCircle, Cpu } from "lucide-react";
+import React, { useState } from "react";
+import Image from "next/image";
+import { Search, MapPin, Tag, Percent, PackageX, AlertCircle, Cpu } from "lucide-react";
 
 interface Product {
   id: number;
@@ -18,6 +19,27 @@ interface SearchResponse {
   success: boolean;
   data?: Product[];
   error?: string;
+}
+
+// ── Peta gambar produk berdasarkan kata kunci nama/kategori ──────────────────
+const PRODUCT_IMAGES: { keywords: string[]; src: string }[] = [
+  { keywords: ["tomat", "ceri"], src: "/product-tomato.png" },
+  { keywords: ["wortel", "carrot"], src: "/product-carrot.png" },
+  { keywords: ["cabai", "cabe", "rawit", "merah besar"], src: "/product-chili.png" },
+];
+
+/** Kembalikan path gambar yang paling cocok untuk nama/kategori produk */
+function getProductImage(name: string, category: string): string {
+  const haystack = (name + " " + category).toLowerCase();
+  for (const entry of PRODUCT_IMAGES) {
+    if (entry.keywords.some((kw) => haystack.includes(kw))) {
+      return entry.src;
+    }
+  }
+  // Fallback berdasarkan kategori
+  if (category === "Bumbu") return "/product-chili.png";
+  if (category === "Buah") return "/product-carrot.png";
+  return "/product-tomato.png"; // default Sayuran
 }
 
 export default function BuyerSemanticSearch() {
@@ -41,8 +63,9 @@ export default function BuyerSemanticSearch() {
     setLastSearchedQuery(queryToFetch);
 
     try {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
       const response = await fetch(
-        `http://localhost:5000/api/search?query=${encodeURIComponent(queryToFetch)}`
+        `${apiBase}/api/search?query=${encodeURIComponent(queryToFetch)}`
       );
 
       if (!response.ok) {
@@ -245,14 +268,15 @@ export default function BuyerSemanticSearch() {
                   key={product.id}
                   className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col"
                 >
-                  {/* Image Placeholder */}
-                  <div className="relative w-full h-52 bg-gray-100 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 group-hover:scale-105 transition-transform duration-500 bg-gray-50">
-                      <svg className="w-16 h-16 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-
+                  {/* Product Image */}
+                  <div className="relative w-full h-52 overflow-hidden bg-gray-100">
+                    <Image
+                      src={getProductImage(product.name, product.category)}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                     {/* Relevance Score Badge */}
                     <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1.5 border border-white/20">
                       <Percent className="w-4 h-4 text-emerald-600" />

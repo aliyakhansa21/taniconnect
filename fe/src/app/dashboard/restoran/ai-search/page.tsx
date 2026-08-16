@@ -1,65 +1,32 @@
-"use client";
+import BuyerSemanticSearch from "@/components/BuyerSemanticSearch";
 
-import { useState } from "react";
-import { Search } from "lucide-react";
-
-const HISTORY_ITEMS = [
-  { id: 1, time: "1 jam lalu" },
-  { id: 2, time: "1 jam lalu" },
-  { id: 3, time: "30 menit lalu" },
-  { id: 4, time: "15 menit lalu" },
-  { id: 5, time: "1 jam lalu" },
-];
-
-const HISTORY_LABELS = [
-  "Tomat Segar Grade A",
-  "Tomat Segar Grade A",
-  "Timun Segar Grade B",
-  "Bawang Merah Grade C",
-  "Tomat Segar Grade A",
-];
+export const metadata = {
+  title: "AI Search — TaniConnect",
+  description: "Cari bahan baku segar dari petani lokal menggunakan pencarian semantik berbasis AI.",
+};
 
 export default function AISearchPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-
   return (
-    <div className="space-y-5">
-      {/* Page Title */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-6 py-5">
-        <h1 className="text-xl font-bold text-gray-900 mb-4">AI Search</h1>
-
-        {/* Search Input */}
-        <div className="flex items-center gap-3 bg-white rounded-2xl border-2 border-[#3A7D1E] px-4 py-3">
-          <Search size={18} className="text-gray-400 shrink-0" />
-          <input
-            id="ai-search-input"
-            type="text"
-            placeholder="Katik kebutuhan bahan Anda..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 text-sm text-gray-700 placeholder-gray-400 bg-transparent outline-none"
-          />
+    <div className="space-y-1">
+      {/* Page Header */}
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-6 py-5 mb-5">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">AI Semantic Search</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Cari bahan baku dengan bahasa alami — AI kami akan menemukan kecocokan terbaik dari petani lokal.
+            </p>
+          </div>
+          {/* AI Badge */}
+          <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-semibold text-emerald-700">Gemini Embeddings</span>
+          </div>
         </div>
       </div>
 
-      {/* Rekomendasi AI */}
-      <div className="bg-white rounded-2xl border border-l-4 border-l-[#C9B97A] border-gray-200 shadow-sm overflow-hidden">
-        <h2 className="text-sm font-bold text-gray-800 px-5 pt-5 pb-3">
-          Rekomendasi AI untuk Anda
-        </h2>
-
-        <div className="divide-y divide-gray-100">
-          {HISTORY_ITEMS.map((item, idx) => (
-            <div
-              key={item.id}
-              className="px-5 py-3.5 flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors cursor-pointer"
-            >
-              <p className="text-sm text-gray-800">{HISTORY_LABELS[idx]}</p>
-              <span className="text-xs text-gray-400 shrink-0">{item.time}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Search Component */}
+      <BuyerSemanticSearch />
     </div>
   );
 }
